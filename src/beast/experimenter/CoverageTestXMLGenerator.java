@@ -34,7 +34,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 			"XML template file containing analysis to be merged with generated sequence data");
 	final public Input<Integer> skipLogLinesInput = new Input<>("skip", "numer of log file lines to skip", 1);
 	final public Input<Integer> burnInPercentageInput = new Input<>("burnin",
-			"percentage of trees to used as burn-in (and will be ignored)", 10);
+			"percentage of trees to used as burn-in (and will be ignored)", 1);
 	final public Input<Boolean> useGammaInput = new Input<>("useGamma", "use gamma rate heterogeneity", true);
 
 	int N = 100;
@@ -73,7 +73,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 
 			Tree tree = trees.get(i);
 
-			RealParameter freqs = new RealParameter(f[i][0] + " " + f[i][1] + " " + f[i][2] + " " + f[i][3]);
+			RealParameter freqs = new RealParameter(f[0][i] + " " + f[1][i] + " " + f[2][i] + " " + f[3][i]);
 			Frequencies f = new Frequencies();
 			f.initByName("frequencies", freqs);
 
@@ -90,7 +90,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 			sitemodel.initByName("gammaCategoryCount", gcc, "substModel", hky, "shape", "" + shapes[i],
 					"proportionInvariant", p);
 			MergeDataWith mergewith = new beast.app.seqgen.MergeDataWith();
-			mergewith.initByName("template", wdir + analysisXML, "output", dir + "/analysis-out" + i + ".xml");
+			mergewith.initByName("template", analysisXML, "output", dir + "/analysis-out" + i + ".xml");
 			SequenceSimulator sim = new beast.app.seqgen.SequenceSimulator();
 			sim.initByName("data", data, "tree", tree, "sequencelength", 2500, "outputFileName",
 					"gammaShapeSequence.xml", "siteModel", sitemodel, "branchRateModel", clockmodel, "merge",
@@ -131,7 +131,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 		System.setProperty("beagle.preferred.flags", Long.toString(beagleFlags));
 
 		NexusParser parser = new beast.util.NexusParser();
-		File fin = new File(wdir + "/dna.trees");
+		File fin = treeFileInput.get();
 		parser.parseFile(fin);
 		trees = parser.trees;
 		int burnin = 0;
@@ -140,7 +140,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 			burnin++;
 		}
 
-		if (burnin != N * (100 + burnInPercentageInput.get()) / 100) {
+		if (trees.size() + burnin != N * (100 + burnInPercentageInput.get()) / 100) {
 			throw new RuntimeException("treeFile length != logFile length");
 		}
 
@@ -153,7 +153,7 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 	private int getIndex(List<String> labels, String prefix) {
 		for (int i = 0; i < labels.size(); i++) {
 			if (labels.get(i).startsWith(prefix)) {
-				return i;
+				return i + 1;
 			}
 		}
 		return 0;
