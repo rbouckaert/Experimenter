@@ -1,0 +1,13 @@
+<package name='Experimenter' version='0.0.1'>
+	<depends on='beast2' atleast='2.6.0'/>
+	<depends on='BEASTLabs' atleast='1.9.0'/>
+
+<packageapp description="CoverageCalculator"
+              class="beast.experimente.CoverageCalculator"
+              args=""
+            />
+<packageapp description="CoverageTestXMLGenerator"
+              class="beast.experimente.CoverageTestXMLGenerator"
+              args=""
+            />
+</package>
