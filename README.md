@@ -9,7 +9,7 @@ To run a simulation study:
 * run CoverageCalculator to summarise coverage of parameters
 
 
-Make sure to have the [Experimenter](https://github.com/rbouckaert/Experimenter) package installed.
+Make sure to have the [Experimenter](https://github.com/rbouckaert/Experimenter) package installed (details at the end).
 
 ## 1. Set up XML for desired model and sample from prior
 
@@ -100,4 +100,22 @@ freqParameter.4                                 92	   4348.83  3316.36
 Coverage should be around 95%. One reason coverage can be lower is if the ESSs are too small, which can be easily checked by looking at the `Mean ESS` and `Min ESS` columns. If these values are much below 200 the chain length should be increased to be sure any low coverage is not due to insufficient convergence of the MCMC chain. The occasional 90 or 91 is acceptable but coverage below 90 almost surely indicate an issue with the model or operator implementation.
 
 The values for posterior, prior and treelikelihood can be ignored: it compares results from sampling from the prior with that of sampling from the posterior so they can be expected to be different.
+
+
+
+
+
+
+
+# Installing Experimenter package
+
+Currently, you need to build from source (which depends on [BEAST 2](https://github.com/CompEvol/beast2) and [BEASTlabs](https://github.com/BEAST2-Dev/BEASTLabs/) code) and install by hand (see "install by hand" section in [managing packages](http://www.beast2.org/managing-packages/).
+
+Quick guide
+
+* clone [BEAST 2](https://github.com/CompEvol/beast2), [BEASTlabs](https://github.com/BEAST2-Dev/BEASTLabs/) and [Experimenter](https://github.com/rbouckaert/Experimenter/) all in same directory
+* build BEAST 2 (using `ant Linux`), then BEASTLabs (using `ant addon`), then 
+Experimenter (again, using `ant addon`) packages.
+* install BEASTlabs (using the package manager, or via BEAUti's `File/Manage pacakges` menu)
+* install Experimenter package by creating `Experimenter` folder in your BEAST package folder, and unzip the file `Experimenter/build/dist/Experimenter.addon.v0.0.1.zip` (assuming version 0.0.1)
 
