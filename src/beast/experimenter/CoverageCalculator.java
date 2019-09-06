@@ -22,7 +22,7 @@ public class CoverageCalculator extends Runnable {
 	final public Input<File> logAnalyserFileInput = new Input<>("logAnalyser", "file produced by loganalyser tool using the -oneline option, containing estimated values", Validate.REQUIRED);
 	public Input<OutFile> outputInput = new Input<>("out", "output file for trace log with truth and mean estimates. Not produced if not specified");
 
-	final private static String space = "                                                ";
+	final static String space = "                                                ";
 	
 	@Override
 	public void initAndValidate() {

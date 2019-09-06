@@ -16,6 +16,7 @@ import beast.core.util.Log;
 public class TraceKSStats extends Runnable {
 	final public Input<LogFile> trace1Input = new Input<>("trace1", "first trace file to compare", Validate.REQUIRED);
 	final public Input<LogFile> trace2Input = new Input<>("trace2", "second trace file to compare", Validate.REQUIRED);
+	final public Input<Integer> burnInPercentageInput = new Input<>("burnin", "percentage of trace logs to used as burn-in (and will be ignored)", 10);
 
 	@Override
 	public void initAndValidate() {
@@ -23,7 +24,7 @@ public class TraceKSStats extends Runnable {
 
 	@Override
 	public void run() throws Exception {
-		int burnInPercentage = 10;
+		int burnInPercentage = burnInPercentageInput.get();
 		LogAnalyser trace1 = new LogAnalyser(trace1Input.get().getAbsolutePath(), burnInPercentage, true, false);
 		LogAnalyser trace2 = new LogAnalyser(trace2Input.get().getAbsolutePath(), burnInPercentage, true, false);
 		
