@@ -1,10 +1,10 @@
 package beast.experimenter;
 
+
 import java.io.File;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Formatter;
 
 import beast.app.util.Application;
 import beast.app.util.OutFile;
@@ -20,7 +20,7 @@ public class CoverageCalculator extends Runnable {
 	final public Input<File> logFileInput = new Input<>("log", "log file containing actual values", Validate.REQUIRED);
 	final public Input<Integer> skipLogLinesInput = new Input<>("skip", "numer of log file lines to skip", 1);
 	final public Input<File> logAnalyserFileInput = new Input<>("logAnalyser", "file produced by loganalyser tool using the -oneline option, containing estimated values", Validate.REQUIRED);
-	public Input<OutFile> outputInput = new Input<>("out", "output file for trace log with truth and mean estimates. Not produced if not specified");
+	final public Input<OutFile> outputInput = new Input<>("out", "output file for trace log with truth and mean estimates. Not produced if not specified");
 
 	final static String space = "                                                ";
 	
