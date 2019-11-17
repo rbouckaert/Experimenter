@@ -34,19 +34,21 @@ public class SBCAnalyser extends Runnable {
 		LogAnalyser truth = new LogAnalyser(logFileInput.get().getAbsolutePath(), 0, true, false);
 		LogAnalyser estimated = new LogAnalyser(logAnalyserFileInput.get().getAbsolutePath(), 0, true, false);
 		int skip = skipLogLinesInput.get();
-		if (truth.getTrace(0).length - skip != estimated.getTrace(0).length) {
-			Log.warning("WARNING: traces are of different lengths: "
-					+ (truth.getTrace(0).length - skip) + "!=" + estimated.getTrace(0).length);
-		}
+//		if (truth.getTrace(0).length - skip != estimated.getTrace(0).length) {
+//			Log.warning("WARNING: traces are of different lengths: "
+//					+ (truth.getTrace(0).length - skip) + "!=" + estimated.getTrace(0).length);
+//		}
 		
-		NumberFormat formatter = new DecimalFormat("#0.00");
+//		NumberFormat formatter = new DecimalFormat("#0.00");
 		
 		int binCount = binCountInput.get();
 		StringBuilder b = new StringBuilder();
 		for (int j = 0; j < binCount; j++) {
 			b.append("bin" + j + "\t");
 		}
-		Log.info(CoverageCalculator.space + "\tmissed\tMean ESS\tMin ESS\t" + b.toString());
+		Log.info(CoverageCalculator.space + "\tmissed"
+//				+ "\tMean ESS\tMin ESS\t" 
+				+ b.toString());
 		BinomialDistribution binom = new BinomialDistributionImpl(estimated.getTrace(0).length, 1.0/binCount);
 		int pLow = binom.inverseCumulativeProbability(0.025);
 		int pUp = binom.inverseCumulativeProbability(0.975);
@@ -54,8 +56,8 @@ public class SBCAnalyser extends Runnable {
 			String label = truth.getLabels().get(i);
 			Double [] trueValues = truth.getTrace(label);
 						
-			Double [] means = estimated.getTrace(label+".mean");
-			Double [] ess = estimated.getTrace(label+".ESS");
+			Double [] means = estimated.getTrace(label);
+//			Double [] ess = estimated.getTrace(label+".ESS");
 			if (means == null) {
 				Log.warning("Skipping " + label);
 			} else {
@@ -73,8 +75,8 @@ public class SBCAnalyser extends Runnable {
 //					binBoundaries[k] = (trueValues[j] + trueValues[j+1]) / 2.0;
 //				}
 
-				double minESS = Double.POSITIVE_INFINITY;
-				double meanESS = 0;
+//				double minESS = Double.POSITIVE_INFINITY;
+//				double meanESS = 0;
 				for (int j = 0; j < trueValues.length - skip; j++) {
 //					int bin = Arrays.binarySearch(binBoundaries, means[j]);
 //					if (bin < 0) {
@@ -90,10 +92,10 @@ public class SBCAnalyser extends Runnable {
 					int bin = rank * (binCount-1) / trueValues.length;
 					bins[bin]++;
 					
-					minESS = Math.min(minESS, ess[j]);
-					meanESS += ess[j];
+//					minESS = Math.min(minESS, ess[j]);
+//					meanESS += ess[j];
 				}
-				meanESS /= (trueValues.length - skip);
+//				meanESS /= (trueValues.length - skip);
 				
 				b = new StringBuilder();
 				int missed = 0;
@@ -106,8 +108,8 @@ public class SBCAnalyser extends Runnable {
 				
 				Log.info(label + (label.length() < CoverageCalculator.space.length() ? CoverageCalculator.space.substring(label.length()) : "") + "\t" + 
 						missed + "\t" + 
-						formatter.format(meanESS) + "\t" + 
-						formatter.format(minESS) + "\t" +
+//						formatter.format(meanESS) + "\t" + 
+//						formatter.format(minESS) + "\t" +
 						b.toString());
 			}
 		}
