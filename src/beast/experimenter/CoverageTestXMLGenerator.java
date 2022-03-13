@@ -110,16 +110,32 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 
 		List<String> labels = trace.getLabels();
 		f = new Double[N][];
-		int fIndex = getIndex(labels, "freq");
-		f[0] = trace.getTrace(fIndex);
-		f[1] = trace.getTrace(fIndex + 1);
-		f[2] = trace.getTrace(fIndex + 2);
-		f[3] = trace.getTrace(fIndex + 3);
+		int index = getIndex(labels, "freq");
+		if (index > 0) {
+			f[0] = trace.getTrace(index);
+			f[1] = trace.getTrace(index + 1);
+			f[2] = trace.getTrace(index + 2);
+			f[3] = trace.getTrace(index + 3);
+		} else {
+			// no frequencies specified
+			f[0] = defaultValue(0.25);
+			f[1] = defaultValue(0.25);
+			f[2] = defaultValue(0.25);
+			f[3] = defaultValue(0.25);
+		}
 
-		kappa = trace.getTrace(getIndex(labels, "kappa"));
+		index = getIndex(labels, "kappa");
+		if (index > 0) {
+			kappa = trace.getTrace(index);
+		} else {
+			kappa = defaultValue(1.0);
+		}
+		
 		shapes = null;
 		if (useGammaInput.get()) {
 			shapes = trace.getTrace(getIndex(labels, "shape"));
+		} else {
+			shapes = defaultValue(1.0);
 		}
 
 		String wdir = workingDirInput.get().getAbsolutePath();
@@ -148,6 +164,14 @@ public class CoverageTestXMLGenerator extends beast.core.Runnable {
 
 		System.err.println("Done");
 
+	}
+
+	private Double[] defaultValue(double d) {
+		Double [] v = new Double[N];
+		for (int i = 0; i < N; i++) {
+			v[i] = d;
+		}
+		return v;
 	}
 
 	private int getIndex(List<String> labels, String prefix) {
